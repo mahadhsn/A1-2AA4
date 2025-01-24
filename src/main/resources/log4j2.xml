@@ -10,5 +10,6 @@
         <Root level="trace">
             <AppenderRef ref="console" />
         </Root>
+        <!-- Changed this to trace for proper logging information -->
     </Loggers>
 </Configuration>

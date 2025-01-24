@@ -11,15 +11,14 @@ import org.apache.commons.cli.*;
 public class Main {
 
     private static final Logger logger = LogManager.getLogger();
+    private static final Options options = new Options();
+    private static final CommandLineParser cmdParser = new DefaultParser();
+    private static final HelpFormatter formatter = new HelpFormatter();
 
     public static void main(String[] args) {
         logger.info("** Starting Maze Runner");
 
-        Options options = new Options();
         options.addOption("i", "input", true, "Input to maze runner");
-
-        CommandLineParser cmdParser = new DefaultParser();
-        HelpFormatter formatter = new HelpFormatter();
 
         try {
             CommandLine cmd = cmdParser.parse(options, args);
