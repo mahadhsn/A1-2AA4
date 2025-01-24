@@ -23,30 +23,12 @@ public class Main {
         }
 
         String inputFilePath = inputHandler.getInputFilePath();
-
         if (inputFilePath == null) {
-            logger.error("/!\\ Missing required -i flag for input file /!\\");
             return;
         }
+
         try {
-
-            logger.info("**** Reading the maze from file: {}", inputFilePath);
-
-            BufferedReader reader = new BufferedReader(new FileReader(inputFilePath));
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-                StringBuilder output = new StringBuilder();
-                for (int idx = 0; idx < line.length(); idx++) {
-                    if (line.charAt(idx) == '#') {
-                        output.append("WALL ");
-                    } else if (line.charAt(idx) == ' ') {
-                        output.append("PASS ");
-                    }
-                }
-                logger.trace(output.toString());
-            }
-            reader.close();
+            Maze maze = new Maze(inputFilePath);
 
         } catch(Exception e) {
             logger.error("/!\\ An error has occurred /!\\");

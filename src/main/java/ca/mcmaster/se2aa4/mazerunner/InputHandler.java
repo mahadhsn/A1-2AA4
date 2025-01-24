@@ -31,6 +31,7 @@ public class InputHandler {
             return cmd.getOptionValue("i");
         }
         else {
+            logger.error("/!\\ Missing required -i flag for input file /!\\");
             return null;
         }
     }
