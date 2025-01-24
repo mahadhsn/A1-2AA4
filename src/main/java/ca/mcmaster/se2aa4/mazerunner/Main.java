@@ -29,12 +29,15 @@ public class Main {
 
         try {
             Maze maze = new Maze(inputFilePath);
+            Explorer explorer = new Explorer(maze); // Create the explorer
+
+            logger.info("**** Computing path");
+            explorer.exploreMaze();
 
         } catch(Exception e) {
             logger.error("/!\\ An error has occurred /!\\");
         }
-        logger.info("**** Computing path");
-        logger.warn("PATH NOT COMPUTED");
+        //logger.warn("PATH NOT COMPUTED");
         logger.info("** End of MazeRunner");
     }
 }
