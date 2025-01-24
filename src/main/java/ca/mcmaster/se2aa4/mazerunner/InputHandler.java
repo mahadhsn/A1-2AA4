@@ -1,4 +1,37 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
+import org.apache.commons.cli.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class InputHandler {
+    private static final Logger logger = LogManager.getLogger(InputHandler.class);
+
+    private CommandLine cmd;
+    private final Options opts;
+
+    public InputHandler() {
+        opts = new Options();
+        opts.addOption("i", "input", true, "Path to the maze input file");
+    }
+
+    public boolean parseArgs(String[] args) {
+        CommandLineParser parser = new DefaultParser();
+        try {
+            cmd = parser.parse(opts, args);
+            return true;
+        } catch (ParseException e) {
+            logger.error("Error parsing arguments: {}", e.getMessage());
+            return false;
+        }
+    }
+
+    public String getInputFilePath() {
+        if (cmd != null && cmd.hasOption("i")) {
+            return cmd.getOptionValue("i");
+        }
+        else {
+            return null;
+        }
+    }
 }
