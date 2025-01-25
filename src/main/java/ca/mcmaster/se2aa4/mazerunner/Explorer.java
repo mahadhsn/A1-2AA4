@@ -41,8 +41,10 @@ public class Explorer {
         while (moveForward()) {
             moves.add("F");
             logger.trace("Moved forward to position: ({}, {})", currentPos[0], currentPos[1]);
+            if (currentPos == end)  {
+                break;
+            }
         }
-
         logger.info("Explorer stopped at position: ({}, {})", currentPos[0], currentPos[1]);
 
         logger.info("Final moves: {}", String.join("", moves)); // Output the final moves
@@ -60,11 +62,24 @@ public class Explorer {
         int newX = currentPos[0];
         int newY = currentPos[1];
 
-        switch (direction) {
-            case 0: newX++; break; // Move right
-            case 1: newY++; break; // Move down
-            case 2: newX--; break; // Move left
-            case 3: newY--; break; // Move up
+        if (currentPos[0] != end[0] || currentPos[1] != end[1]) {
+            switch (direction) {
+                case 0:
+                    newX++;
+                    break; // Move right
+                case 1:
+                    newY++;
+                    break; // Move down
+                case 2:
+                    newX--;
+                    break; // Move left
+                case 3:
+                    newY--;
+                    break; // Move up
+            }
+        } else {
+            logger.trace("Reached end!");
+            return false;
         }
 
         if (isValidMove(newX, newY)) {

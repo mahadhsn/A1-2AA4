@@ -32,6 +32,7 @@ public class Maze {
             String line;
             rows = 0;
             logger.info("**** Reading the maze from file: {}", filePath);
+
             // first pass: get the grid dimensions
             while ((line = reader.readLine()) != null) {
                 cols = line.length();
@@ -58,7 +59,7 @@ public class Maze {
                 for (int idx = 0; idx < line.length(); idx++) {
                     if (line.charAt(idx) == '#') {
                         output.append("WALL ");
-                    } else if (line.charAt(idx) == ' ') {
+                    } else if (line.charAt(idx) != '#') {
                         output.append("PASS ");
                     }
                 }
@@ -74,19 +75,21 @@ public class Maze {
     public void getOpenings() {
         // assumes that the openings will always be either on the left or right only
         // and only one on each
-        logger.info("Getting Maze Openings");
-
         for (int row = 0; row < rows; row++) {
             if (grid[row][0] == ' ') {
                 this.leftOpening = new int[]{0, row};
             }
-            else if (grid[row][cols - 1] == ' ') {
+            if (grid[row][cols - 1] != '#') {
                 this.rightOpening = new int[]{(cols - 1), row};
             }
-            if (this.leftOpening != null && this.rightOpening != null) {
-                break;
-            }
         }
+        if (this.leftOpening == null) {
+            logger.error("Error reading start point");
+        }
+        if (this.rightOpening == null) {
+            logger.error("Error reading end point");
+        }
+        logger.info("Maze start ({},{}) and end ({},{}) points read successfully!", leftOpening[0],leftOpening[1],rightOpening[0],rightOpening[1]);
     }
 
     public char getGridAt(int x, int y) {

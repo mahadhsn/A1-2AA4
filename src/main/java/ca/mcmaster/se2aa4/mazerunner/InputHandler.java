@@ -37,6 +37,7 @@ public class InputHandler {
         }
     }
 
+    // implement this properly later
     public String getMazePath() {
         if (cmd != null && cmd.hasOption("p")) {
             return cmd.getOptionValue("p");
