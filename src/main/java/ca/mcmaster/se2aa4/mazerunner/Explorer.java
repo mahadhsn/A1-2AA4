@@ -39,7 +39,6 @@ public class Explorer {
         logger.info("Starting exploration at position: ({}, {})", currentPos[0], currentPos[1]);
 
         while (moveForward()) {
-            moves.add("F");
             logger.trace("Moved forward to position: ({}, {})", currentPos[0], currentPos[1]);
             if (currentPos == end)  {
                 break;
@@ -48,6 +47,37 @@ public class Explorer {
         logger.info("Explorer stopped at position: ({}, {})", currentPos[0], currentPos[1]);
 
         logger.info("Final moves: {}", String.join("", moves)); // Output the final moves
+    }
+
+    public void exploreRightHandRule() {
+        if (currentPos == null) {
+            logger.error("No valid start point foiund in maze!");
+        }
+
+        logger.info("Starting right-hand rule exploration at position: ({}, {})", currentPos[0], currentPos[1]);
+
+        while(!reachedEnd()) {
+            if (canMoveRight()) {
+                turnRight();
+                moveForward();
+            } else if (canMoveForward()) {
+                moveForward();
+            } else if (canMoveLeft()) {
+                turnLeft();
+                moveForward();
+            } else { // for dead-ends
+                turnAround();
+                moveForward();
+            }
+        }
+
+        logger.info("Explorer stopped at position: ({}, {})", currentPos[0], currentPos[1]);
+
+        logger.info("Final moves: {}", String.join("", moves)); // Output the final moves
+    }
+
+    private boolean reachedEnd() {
+        return currentPos[0] == end[0] && currentPos[1] == end[1];
     }
 
     private boolean isValidMove(int x, int y) {
@@ -62,28 +92,24 @@ public class Explorer {
         int newX = currentPos[0];
         int newY = currentPos[1];
 
-        if (currentPos[0] != end[0] || currentPos[1] != end[1]) {
-            switch (direction) {
-                case 0:
-                    newX++;
-                    break; // Move right
-                case 1:
-                    newY++;
-                    break; // Move down
-                case 2:
-                    newX--;
-                    break; // Move left
-                case 3:
-                    newY--;
-                    break; // Move up
-            }
-        } else {
-            logger.trace("Reached end!");
-            return false;
+        switch (direction) {
+            case 0:
+                newX++;
+                break; // Move right
+            case 1:
+                newY++;
+                break; // Move down
+            case 2:
+                newX--;
+                break; // Move left
+            case 3:
+                newY--;
+                break; // Move up
         }
 
         if (isValidMove(newX, newY)) {
             currentPos = new int[]{newX, newY};
+            moves.add("F");
             return true;
         }
 
@@ -91,16 +117,57 @@ public class Explorer {
         return false;
     }
 
+    private boolean canMoveForward() {
+        int newX = currentPos[0];
+        int newY = currentPos[1];
+
+        switch (direction) {
+            case 0:
+                newX++;
+                break; // Move right
+            case 1:
+                newY++;
+                break; // Move down
+            case 2:
+                newX--;
+                break; // Move left
+            case 3:
+                newY--;
+                break; // Move up
+        }
+        return isValidMove(newX, newY); // check if moving forward is possible or not
+    }
+
+
+    private boolean canMoveRight() {
+        direction = (direction + 1) % 4;
+        boolean canMove = canMoveForward();
+        direction = (direction + 3) % 4;
+        return canMove;
+    }
+
+    private boolean canMoveLeft() {
+        direction = (direction + 3) % 4;
+        boolean canMove = canMoveForward();
+        direction = (direction + 1) % 4;
+        return canMove;
+    }
+
     // very cool ways of turning
     private void turnRight() {
         direction = (direction + 1) % 4;
-        logger.trace("Turning Right");
-        moveForward();
+        moves.add("R");
     }
+
     private void turnLeft() {
         direction = (direction + 3) % 4;
-        logger.trace("Turning Left");
-        moveForward();
+        moves.add("L");
+    }
+
+    private void turnAround() {
+        direction = (direction + 2) % 4; // Turn 180 degrees
+        moves.add("L");
+        moves.add("L");
     }
 
     public int[] getCurrentPosition() {

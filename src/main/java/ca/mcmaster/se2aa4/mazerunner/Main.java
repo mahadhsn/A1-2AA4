@@ -34,7 +34,7 @@ public class Main {
             Explorer explorer = new Explorer(maze); // Create the explorer
 
             logger.info("**** Computing path");
-            explorer.exploreMaze();
+            explorer.exploreRightHandRule();
 
         } catch(Exception e) {
             logger.error("/!\\ An error has occurred /!\\ Error:{}", e.getMessage());
