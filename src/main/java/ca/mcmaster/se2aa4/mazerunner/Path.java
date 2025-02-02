@@ -15,7 +15,9 @@ public class Path {
     private String formattedPath;
     private String formattedInputtedPath;
     private String factorizedPath;
-    private String factorizedInputtedPath; // initialize all the variables
+    private String factorizedInputtedPath; 
+    private boolean isValidFormattedInputtedPath;
+    // initialize all the variables
 
     public Path(List<String> path) { // constructor for when only the path is generated
         this.path = path;
@@ -36,11 +38,18 @@ public class Path {
         formattedInputtedPath = formatMoves(this.inputtedPath);
         factorizedInputtedPath = factorizeMoves(this.inputtedPath);
 
+        isValidFormattedPath();
+
+        if (!isValidFormattedInputtedPath) {
+            logger.error("Invalid inputted path: {}", inputtedPath);
+            return;
+        }
+
         logger.info("Factorized inputted path: {}", factorizedInputtedPath);
         logger.info("Canonical inputted path: {}", formattedInputtedPath);
     }
 
-    public Path(List<String> path, String inputtedPath) { // constructor for when both the path is generated and inputted
+    public Path(List<String> path, String inputtedPath) { // constructor for when both the path is generated and inputted (not used yet)
 
         this.path = path;
 
@@ -53,6 +62,13 @@ public class Path {
         factorizedPath = factorizeMoves(this.path);
         formattedInputtedPath = formatMoves(this.inputtedPath);
         factorizedInputtedPath = factorizeMoves(this.inputtedPath);
+
+        isValidFormattedPath();
+
+        if (!isValidFormattedInputtedPath) {
+            logger.error("Invalid inputted path: {}", inputtedPath);
+            return;
+        }
 
         logger.info("Initialized path: {}", factorizedPath);
         logger.info("Canonical path: {}", formattedPath);
@@ -149,6 +165,12 @@ public class Path {
         return regularPath.toString(); // return the regular path
     }
 
+    private void isValidFormattedPath() {
+
+        isValidFormattedInputtedPath = formattedInputtedPath.trim().matches("^(F+|L+|R+)( (F+|L+|R+))*$"); // check if the formatted path is valid
+
+    }
+
     // bunch of getters
     public String getInputtedPath() {
         return stringInputPath;
@@ -168,5 +190,9 @@ public class Path {
 
     public String getFactorizedInputtedPath() {
         return factorizedInputtedPath;
+    }
+
+    public boolean getIsValidFormattedInputtedPath() {
+        return isValidFormattedInputtedPath;
     }
 }

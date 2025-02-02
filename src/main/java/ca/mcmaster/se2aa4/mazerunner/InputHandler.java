@@ -43,7 +43,7 @@ public class InputHandler { // InputHandler class to handle command line argumen
         }
         else {
             logger.info("Missing required -p flag for inputted maze path");
-            return null;
+            return "empty";
         }
     }
 }

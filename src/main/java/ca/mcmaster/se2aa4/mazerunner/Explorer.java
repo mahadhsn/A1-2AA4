@@ -49,7 +49,9 @@ public class Explorer { // Explorer class to explore the maze
         logger.info("Final moves: {}", String.join("", moves)); // Output the final moves
     }
 
-    public void exploreRightHandRule() { // right hand rule exploration
+    public void exploreWestRightHandRule() { // right hand rule exploration
+        initWest(); // initialize explorer for west opening
+
         if (currentPos == null) {
             logger.error("No valid start point found in maze!");
         }
@@ -76,7 +78,80 @@ public class Explorer { // Explorer class to explore the maze
         logger.info("Final moves: {}", String.join("", moves)); // Output the final moves
     }
 
-    public boolean solveMazeFromInput(String input) { // solve maze using input string
+    public void exploreEastRightHandRule() { // right hand rule exploration
+        initEast(); // initialize explorer for east opening
+
+        if (currentPos == null) {
+            logger.error("No valid start point found in maze!");
+        }
+
+        logger.info("Starting right-hand rule exploration at position: ({}, {})", currentPos[0], currentPos[1]);
+
+        while(!reachedEnd()) { // while end is not reached
+            if (canMoveRight()) { // if can move right, turn right and move forward
+                turnRight();
+                moveForward();
+            } else if (canMoveForward()) { // if can move forward, move forward
+                moveForward();
+            } else if (canMoveLeft()) { // if can move left, turn left and move forward
+                turnLeft();
+                moveForward();
+            } else { // u-turns for dead-ends
+                turnAround();
+                moveForward();
+            }
+        }
+
+        logger.info("Explorer stopped at position: ({}, {})", currentPos[0], currentPos[1]);
+
+        logger.info("Final moves: {}", String.join("", moves)); // Output the final moves
+    }
+
+    public boolean solveWestMazeFromInput(String input) { // solve maze using input string
+        initWest(); // initialize explorer for west opening
+        int count = 0; // count of moves
+
+        if (input == null || input.isEmpty()) {
+            logger.error("Input string is empty or null.");
+            return false;
+        }
+
+        logger.info("Starting maze exploration from position: ({}, {})", currentPos[0], currentPos[1]);
+
+        for (char move : input.toCharArray()) { // for each move in input string, move accordingly
+            count++;
+            if (move == 'F') { 
+                if (!canMoveForward()) {
+                    logger.warn("Hit a wall during move or out of bounds.");
+                    break;
+                }
+                moveForward();
+            } else if (move == 'R') {
+                turnRight();
+            } else if (move == 'L') {
+                turnLeft();
+            } else {
+                logger.warn("Invalid move character encountered: {}", move);
+                return false;
+            }
+
+            
+            if (reachedEnd() && count == input.length()) { // check if end of the maze was reached while also end of the path
+                logger.info("Maze solved! Reached the end at position: ({}, {})", currentPos[0], currentPos[1]);
+                return true;
+            }
+            else if (reachedEnd() && count != input.length()) { // if end of maze was reached but path is still continuing, return false
+                logger.warn("Reached end but path is still continuing!");
+                return false;
+            }
+        }
+
+        logger.warn("Finished processing input, but did not reach the end. End position is: ({},{})", currentPos[0], currentPos[1]);
+        return false;
+    }
+
+    public boolean solveEastMazeFromInput(String input) { // solve maze using input string
+        initEast(); // initialize explorer for west opening
         int count = 0; // count of moves
 
         if (input == null || input.isEmpty()) {
@@ -203,6 +278,22 @@ public class Explorer { // Explorer class to explore the maze
         moves.add("L");
     }
 
+    private void initWest() {
+        start = maze.getLeftOpening();
+        end = maze.getRightOpening();
+        currentPos = start;
+        direction = 0;
+        moves = new ArrayList<>();
+    }
+
+    private void initEast() {
+        start = maze.getRightOpening();
+        end = maze.getLeftOpening();
+        currentPos = start;
+        direction = 2;
+        moves = new ArrayList<>();
+    }
+
     // getters
     public int[] getCurrentPosition() {
         return currentPos;
@@ -214,5 +305,13 @@ public class Explorer { // Explorer class to explore the maze
 
     public List<String> getMoves() {
         return moves;
+    }
+    
+    public int[] getStart() {
+        return start;
+    }
+
+    public int[] getEnd() {
+        return end;
     }
 }
