@@ -159,5 +159,4 @@ public class Path {
     public String getFactorizedInputtedPath() {
         return factorizedInputtedPath;
     }
-
 }
