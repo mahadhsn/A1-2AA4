@@ -26,7 +26,7 @@ public class Explorer {
         this.direction = 0;
     }
 
-    public void exploreMaze() {
+    public void exploreMazeBasic() {
         // very basic moveForward function where it only moves forward until it encounters a wall then terminates
         // implement better algorithms for final release
         // move forward good for mvp
@@ -51,7 +51,7 @@ public class Explorer {
 
     public void exploreRightHandRule() {
         if (currentPos == null) {
-            logger.error("No valid start point foiund in maze!");
+            logger.error("No valid start point found in maze!");
         }
 
         logger.info("Starting right-hand rule exploration at position: ({}, {})", currentPos[0], currentPos[1]);

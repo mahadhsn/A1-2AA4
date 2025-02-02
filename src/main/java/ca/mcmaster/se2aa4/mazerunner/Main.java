@@ -24,8 +24,19 @@ public class Main {
         }
 
         String inputFilePath = inputHandler.getInputFilePath();
+        String inputPath = inputHandler.getMazePath();
+
         if (inputFilePath == null) {
             logger.error("Failed to read File Path.");
+            return;
+        }
+
+        if (inputPath == null) {
+            logger.info("No path provided.");
+        }
+
+        else {
+            Path path = new Path(inputPath);
             return;
         }
 
