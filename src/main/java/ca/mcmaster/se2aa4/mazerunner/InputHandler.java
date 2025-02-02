@@ -4,22 +4,22 @@ import org.apache.commons.cli.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class InputHandler {
+public class InputHandler { // InputHandler class to handle command line arguments
     private static final Logger logger = LogManager.getLogger(InputHandler.class);
 
     private CommandLine cmd;
     private final Options opts;
 
-    public InputHandler() {
+    public InputHandler() { // constructor to initialize Options object
         opts = new Options();
         opts.addOption("i", "input", true, "Path to the maze input file");
         opts.addOption("p", "path", true, "Solve maze based on inputted path");
     }
 
-    public boolean parseArgs(String[] args) {
+    public boolean parseArgs(String[] args) { // parseArgs method to parse command line arguments
         CommandLineParser parser = new DefaultParser();
         try {
-            cmd = parser.parse(opts, args);
+            cmd = parser.parse(opts, args); // parse command line arguments
             return true;
         } catch (ParseException e) {
             logger.error("Error parsing arguments: {}", e.getMessage());
@@ -27,7 +27,7 @@ public class InputHandler {
         }
     }
 
-    public String getInputFilePath() {
+    public String getInputFilePath() { // getInputFilePath method to get input file path if -i flag is present
         if (cmd != null && cmd.hasOption("i")) {
             return cmd.getOptionValue("i");
         }
@@ -37,13 +37,12 @@ public class InputHandler {
         }
     }
 
-    // implement this properly later
-    public String getMazePath() {
+    public String getMazePath() { // getMazePath method to get maze path if -p flag is present
         if (cmd != null && cmd.hasOption("p")) {
             return cmd.getOptionValue("p");
         }
         else {
-            logger.error("/!\\ Missing required -p flag for inputted maze path /!\\");
+            logger.info("Missing required -p flag for inputted maze path");
             return null;
         }
     }
