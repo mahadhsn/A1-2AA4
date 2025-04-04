@@ -8,11 +8,11 @@ import java.util.List;
 public class Explorer { // Explorer class to explore the maze
     private static final Logger logger = LogManager.getLogger();
 
-    private Maze maze;
+    private final Maze maze;
     private int[] currentPos;
     private int[] start;
     private int[] end;
-    private boolean[][] visited;
+    private final boolean[][] visited;
     private List<String> moves;
     private int direction = 0; // directions (0: Right, 1: Down, 2: Left, 3: Up)
 

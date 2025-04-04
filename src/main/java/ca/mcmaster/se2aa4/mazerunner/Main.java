@@ -46,17 +46,11 @@ public class Main {
             logger.info("No path provided.");
         }
 
-        else if (inputPath == null) {
-            logger.error("Failed to read Maze Path.");
-            System.out.println("Could not read maze path.");
-            return;
-        }
-        
         else { // if path is provided
 
             Path path = new Path(inputPath); // initiate path
 
-            if (path.getIsValidFormattedInputtedPath() == false) {
+            if (!path.getIsValidFormattedInputtedPath()) {
                 logger.error("Invalid inputted path.");
                 System.out.println("Invalid inputted path: " + inputPath);
                 return;
@@ -65,14 +59,14 @@ public class Main {
             System.out.println("Inputted canonical path: " + path.getFormattedInputtedPath());
             System.out.println("Inputted factorized path: " + path.getFactorizedInputtedPath());
             
-            System.out.println("");
+            System.out.println();
 
             System.out.println("Solving maze with path from west"); 
             System.out.println("Starting maze at: " + Arrays.toString(explorer.getStart())); // print starting position
 
             MazeValidator mazeValidator = new MazeValidator(maze, explorer, path); // initiate mazeValidator
             
-            if (mazeValidator.getIsValidWest() == false) {
+            if (!mazeValidator.getIsValidWest()) {
                 logger.error("Maze could not be solved from west side with the provided path.");
                 System.out.println("Maze could not be solved from west side with the provided path. Ended at position: " + Arrays.toString(explorer.getCurrentPosition()));
             }
@@ -80,12 +74,12 @@ public class Main {
                 System.out.println("Maze solved from west with inputted path!");
             }
 
-            System.out.println("");
+            System.out.println();
 
             System.out.println("Solving maze with path from east"); 
             System.out.println("Starting maze at: " + Arrays.toString(explorer.getStart())); // print starting position
 
-            if (mazeValidator.getIsValidEast() == false) {
+            if (!mazeValidator.getIsValidEast()) {
                 logger.error("Maze could not be solved from east side with the provided path.");
                 System.out.println("Maze could not be solved from east side with the provided path. Ended at position: " + Arrays.toString(explorer.getCurrentPosition()));
             }
@@ -99,7 +93,7 @@ public class Main {
         try { // try block for solving maze without path
             
             System.out.println("Starting right hand rule algorithm");
-            System.out.println("");
+            System.out.println();
             logger.info("**** Computing path");
 
             explorer.exploreWestRightHandRule(); // explore maze with right hand rule from west
@@ -111,7 +105,7 @@ public class Main {
             System.out.println("Maze solved from west!"); 
             System.out.println("Final canonical west path: " + pathWest.getFormattedPath());
             System.out.println("Final factorized west path: " + pathWest.getFactorizedPath());
-            System.out.println("");
+            System.out.println();
 
             explorer.exploreEastRightHandRule(); // explore maze with right hand rule from east
             List<String> movesEast = explorer.getMoves(); 
