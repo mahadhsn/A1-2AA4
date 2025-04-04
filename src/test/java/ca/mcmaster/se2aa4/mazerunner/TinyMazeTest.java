@@ -15,7 +15,7 @@ class TinyMazeTest {
     }
 
     @Test
-    void testMazeWest() {
+    void testMazeWestWithInput() {
         String westPath = "5F 2L 2F R 2F R 2F 2L 2F R 2F R 3F";
         Path path = new Path(westPath);
         MazeValidator mv = new MazeValidator(maze, explorer, path);
@@ -23,7 +23,7 @@ class TinyMazeTest {
     }
 
     @Test
-    void testMazeEast() {
+    void testMazeEastWithInput() {
         String eastPath = "5F 2L 2F R 2F R 2F 2L 2F R 2F R 3F";
         Path path = new Path(eastPath);
         MazeValidator mv = new MazeValidator(maze, explorer, path);

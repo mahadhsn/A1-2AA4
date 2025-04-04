@@ -118,12 +118,16 @@ public class Explorer { // Explorer class to explore the maze
             };
 
             if (command != null) {
+                if (move == 'F' && !canMoveForward()) {
+                    logger.warn("Move " + move + " is not allowed at position: ({}, {}) while facing: {}", currentPos[0], currentPos[1], direction);
+                    logger.warn("Final moves: {}", String.join("", moves));
+                    return false;
+                }
                 executeCommand(command);
             }
-
             
             if (reachedEnd() && count == input.length()) { // check if end of the maze was reached while also end of the path
-                logger.info("Maze solved! Reached the end at position: ({}, {})", currentPos[0], currentPos[1]);
+                logger.info("Maze solved from west! Reached the end at position: ({}, {})", currentPos[0], currentPos[1]);
                 return true;
             }
             else if (reachedEnd() && count != input.length()) { // if end of maze was reached but path is still continuing, return false
@@ -132,7 +136,9 @@ public class Explorer { // Explorer class to explore the maze
             }
         }
 
-        logger.warn("Finished processing input, but did not reach the end. End position is: ({},{})", currentPos[0], currentPos[1]);
+        logger.warn("Finished processing input, but did not reach the end. Last position is: ({},{})", currentPos[0], currentPos[1]);
+        logger.warn("End should have been: ({},{})", end[0], end[1]);
+        logger.warn("Final moves: {}", String.join("", moves));
         return false;
     }
 
@@ -156,12 +162,18 @@ public class Explorer { // Explorer class to explore the maze
                 default -> null;
             };
 
+
             if (command != null) {
+                if (move == 'F' && !canMoveForward()) {
+                    logger.warn("Move {} is not allowed at position: ({}, {}) while facing: {}", move, currentPos[0], currentPos[1], direction);
+                    logger.warn("Final moves: {}", String.join("", moves));
+                    return false;
+                }
                 executeCommand(command);
             }
 
             if (reachedEnd() && count == input.length()) { // check if end of the maze was reached while also end of the path
-                logger.info("Maze solved! Reached the end at position: ({}, {})", currentPos[0], currentPos[1]);
+                logger.info("Maze solved from east! Reached the end at position: ({}, {})", currentPos[0], currentPos[1]);
                 return true;
             }
             else if (reachedEnd() && count != input.length()) { // if end of maze was reached but path is still continuing, return false
@@ -170,7 +182,9 @@ public class Explorer { // Explorer class to explore the maze
             }
         }
 
-        logger.warn("Finished processing input, but did not reach the end. End position is: ({},{})", currentPos[0], currentPos[1]);
+        logger.warn("Finished processing input, but did not reach the end. Last position is: ({},{})", currentPos[0], currentPos[1]);
+        logger.warn("End should have been: ({},{})", end[0], end[1]);
+        logger.warn("Final moves: {}", String.join("", moves));
         return false;
     }
 

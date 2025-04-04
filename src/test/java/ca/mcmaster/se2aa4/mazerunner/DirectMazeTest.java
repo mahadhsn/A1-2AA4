@@ -15,7 +15,7 @@ class DirectMazeTest {
     }
 
     @Test
-    void testMazeWest() {
+    void testMazeWestWithInput() {
         String westPath = "F R 2F L 3F R F L F R F L 2F";
         Path path = new Path(westPath);
         MazeValidator mv = new MazeValidator(maze, explorer, path);
@@ -23,7 +23,7 @@ class DirectMazeTest {
     }
 
     @Test
-    void testMazeEast() {
+    void testMazeEastWithInput() {
         String eastPath = "2F R 2F L 4F R 2F L F";
         Path path = new Path(eastPath);
         MazeValidator mv = new MazeValidator(maze, explorer, path);
