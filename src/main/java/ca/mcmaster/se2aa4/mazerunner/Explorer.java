@@ -1,5 +1,6 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
+import ca.mcmaster.se2aa4.mazerunner.Commands.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ public class Explorer { // Explorer class to explore the maze
     private final boolean[][] visited;
     private List<String> moves;
     private int direction = 0; // directions (0: Right, 1: Down, 2: Left, 3: Up)
+    private final List<Command> commandHistory = new ArrayList<>();
 
     public Explorer(Maze maze) { // constructor
         this.maze = maze;
@@ -26,27 +28,9 @@ public class Explorer { // Explorer class to explore the maze
         this.direction = 0;
     }
 
-    public void exploreMazeBasic() {
-        // very basic moveForward function where it only moves forward until it encounters a wall then terminates
-        // implement better algorithms for final release
-        // move forward good for mvp
-
-        if (currentPos == null) {
-            logger.error("No valid starting point found in the maze.");
-            return;
-        }
-
-        logger.info("Starting exploration at position: ({}, {})", currentPos[0], currentPos[1]);
-
-        while (moveForward()) {
-            logger.trace("Moved forward to position: ({}, {})", currentPos[0], currentPos[1]);
-            if (currentPos == end)  {
-                break;
-            }
-        }
-        logger.info("Explorer stopped at position: ({}, {})", currentPos[0], currentPos[1]);
-
-        logger.info("Final moves: {}", String.join("", moves)); // Output the final moves
+    private void executeCommand(Command command) {
+        command.execute();
+        commandHistory.add(command);
     }
 
     public void exploreWestRightHandRule() { // right hand rule exploration
@@ -60,16 +44,19 @@ public class Explorer { // Explorer class to explore the maze
 
         while(!reachedEnd()) { // while end is not reached
             if (canMoveRight()) { // if can move right, turn right and move forward
-                turnRight();
-                moveForward();
-            } else if (canMoveForward()) { // if can move forward, move forward
-                moveForward();
-            } else if (canMoveLeft()) { // if can move left, turn left and move forward
-                turnLeft();
-                moveForward();
-            } else { // u-turns for dead-ends
-                turnAround();
-                moveForward();
+                executeCommand(new TurnRightCommand(this));
+                executeCommand(new MoveForwardCommand(this));
+            }
+            else if (canMoveForward()) { // if can move forward, move forward
+                executeCommand(new MoveForwardCommand(this));
+            }
+            else if (canMoveLeft()) { // if can move left, turn left and move forward
+                executeCommand(new TurnLeftCommand(this));
+                executeCommand(new MoveForwardCommand(this));
+            }
+            else { // u-turns for dead-ends
+                executeCommand(new TurnAroundCommand(this));
+                executeCommand(new MoveForwardCommand(this));
             }
         }
 
@@ -89,16 +76,19 @@ public class Explorer { // Explorer class to explore the maze
 
         while(!reachedEnd()) { // while end is not reached
             if (canMoveRight()) { // if can move right, turn right and move forward
-                turnRight();
-                moveForward();
-            } else if (canMoveForward()) { // if can move forward, move forward
-                moveForward();
-            } else if (canMoveLeft()) { // if can move left, turn left and move forward
-                turnLeft();
-                moveForward();
-            } else { // u-turns for dead-ends
-                turnAround();
-                moveForward();
+                executeCommand(new TurnRightCommand(this));
+                executeCommand(new MoveForwardCommand(this));
+            }
+            else if (canMoveForward()) { // if can move forward, move forward
+                executeCommand(new MoveForwardCommand(this));
+            }
+            else if (canMoveLeft()) { // if can move left, turn left and move forward
+                executeCommand(new TurnLeftCommand(this));
+                executeCommand(new MoveForwardCommand(this));
+            }
+            else { // u-turns for dead-ends
+                executeCommand(new TurnAroundCommand(this));
+                executeCommand(new MoveForwardCommand(this));
             }
         }
 
@@ -120,19 +110,15 @@ public class Explorer { // Explorer class to explore the maze
 
         for (char move : input.toCharArray()) { // for each move in input string, move accordingly
             count++;
-            if (move == 'F') { 
-                if (!canMoveForward()) {
-                    logger.warn("Hit a wall during move or out of bounds.");
-                    break;
-                }
-                moveForward();
-            } else if (move == 'R') {
-                turnRight();
-            } else if (move == 'L') {
-                turnLeft();
-            } else {
-                logger.warn("Invalid move character encountered: {}", move);
-                return false;
+            Command command = switch (move) {
+                case 'F' -> new MoveForwardCommand(this);
+                case 'R' -> new TurnRightCommand(this);
+                case 'L' -> new TurnLeftCommand(this);
+                default -> null;
+            };
+
+            if (command != null) {
+                executeCommand(command);
             }
 
             
@@ -163,22 +149,17 @@ public class Explorer { // Explorer class to explore the maze
 
         for (char move : input.toCharArray()) { // for each move in input string, move accordingly
             count++;
-            if (move == 'F') { 
-                if (!canMoveForward()) {
-                    logger.warn("Hit a wall during move or out of bounds.");
-                    break;
-                }
-                moveForward();
-            } else if (move == 'R') {
-                turnRight();
-            } else if (move == 'L') {
-                turnLeft();
-            } else {
-                logger.warn("Invalid move character encountered: {}", move);
-                return false;
+            Command command = switch (move) {
+                case 'F' -> new MoveForwardCommand(this);
+                case 'R' -> new TurnRightCommand(this);
+                case 'L' -> new TurnLeftCommand(this);
+                default -> null;
+            };
+
+            if (command != null) {
+                executeCommand(command);
             }
 
-            
             if (reachedEnd() && count == input.length()) { // check if end of the maze was reached while also end of the path
                 logger.info("Maze solved! Reached the end at position: ({}, {})", currentPos[0], currentPos[1]);
                 return true;
@@ -205,10 +186,10 @@ public class Explorer { // Explorer class to explore the maze
         return withinBounds && isNotWall; // return if both conditions are met
     }
 
-    private boolean moveForward() { // move forward
+    public void moveForwardCommand() { // move forward
         int newX = currentPos[0];
         int newY = currentPos[1];
-    
+
         if (direction == 0) {
             newX++; // Move right
         } else if (direction == 1) {
@@ -218,15 +199,11 @@ public class Explorer { // Explorer class to explore the maze
         } else if (direction == 3) {
             newY--; // Move up
         }
-    
+
         if (isValidMove(newX, newY)) { // check if moving forward is possible
             currentPos = new int[]{newX, newY};
-            moves.add("F"); // add move to list
-            return true;
+            moves.add("F");
         }
-    
-        logger.warn("Hit a wall at position: ({}, {})", newX, newY);
-        return false;
     }
 
     private boolean canMoveForward() { // check if moving forward is possible
@@ -242,10 +219,8 @@ public class Explorer { // Explorer class to explore the maze
         } else if (direction == 3) {
             newY--; // Move up
         }
-    
         return isValidMove(newX, newY); // check if moving forward is possible or not
     }
-
 
     private boolean canMoveRight() { // check if moving right is possible
         direction = (direction + 1) % 4; // methods were not used as to not change the direction of the explorer
@@ -261,19 +236,18 @@ public class Explorer { // Explorer class to explore the maze
         return canMove;
     }
 
-    // very cool ways of turning
-    private void turnRight() {
+    public void turnRightCommand() {
         direction = (direction + 1) % 4; // Turn 90 degrees right by adding 1 to direction
         moves.add("R");
     }
 
-    private void turnLeft() {
-        direction = (direction + 3) % 4; // Turn 90 degrees left by adding 3 to direction
+    public void turnLeftCommand() {
+        direction = (direction + 3) % 4;
         moves.add("L");
     }
 
-    private void turnAround() {
-        direction = (direction + 2) % 4; // Turn 180 degrees by adding 2 to direction
+    public void turnAroundCommand() {
+        direction = (direction + 2) % 4;
         moves.add("L");
         moves.add("L");
     }
