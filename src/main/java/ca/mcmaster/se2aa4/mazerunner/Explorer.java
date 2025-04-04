@@ -16,9 +16,9 @@ public class Explorer extends Subject { // Explorer class to explore the maze
     private int[] end;
     private List<String> moves;
     private int direction = 0; // directions (0: Right, 1: Down, 2: Left, 3: Up)
-    private final List<Command> commandHistory = new ArrayList<>();
+    private final List<Command> commandHistory = new ArrayList<>(); // list of all commands if needed
 
-    // states
+    // states for the observers
     private boolean isValidWest = false;
     private boolean isValidEast = false;
     private boolean solvingWithInput = false;
