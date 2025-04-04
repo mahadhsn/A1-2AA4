@@ -23,6 +23,8 @@ class MediumMazeTest {
     void testMazeWestWithInput() {
         Path path = new Path(westPath);
         MazeValidator mv = new MazeValidator(maze, explorer, path);
+        explorer.attach(mv);
+        mv.validateWestMazeWithPath();
         assertTrue(mv.getIsValidWest(), "Maze is valid from west path");
     }
 
@@ -31,6 +33,8 @@ class MediumMazeTest {
         String eastPath = "F R 4F L 10F R 2F R 4F 2L 4F R 2F R 4F 2L 4F R 6F R 2F R 4F 2L 4F R 2F R 4F 2L 4F R 4F R 2F R 2F 2L 2F R 2F R 2F L 4F 2L 4F R 2F R 4F L 2F 2L 2F R 4F R 2F R 2F 2L 2F L 2F R 4F R 2F R 2F 2L 4F 2L 2F R 14F R 6F R 2F R 4F 2L 2F R 2F R 2F 2L 2F R 2F R 2F 2L 2F L 4F R 2F L 2F R 4F R 2F R 2F L 2F R 2F 2L 2F R 2F R 2F 2L 2F R 2F R 6F 2L 2F R 2F R 2F L 2F 2L 2F R 2F R 2F 2L 4F R 2F R 6F R 2F 2L 4F L 2F 2L 2F R 2F R 6F R 6F R 2F R 4F 2L 4F R 2F R 2F 2L 2F R 2F R 2F 2L 2F L 8F 2L 2F R 4F R 6F R 2F R 4F 2L 6F R 2F R 4F 2L 4F L 2F R 2F R 2F L 2F 2L 2F R 2F R 4F R 2F L 8F L 4F 2L 2F R 2F R 4F R 2F L 4F 2L 4F R 2F R 6F R 2F 2L 2F R 4F R 2F R 2F 2L 4F 2L 2F R 2F R 4F R 2F L 2F R F";
         Path path = new Path(eastPath);
         MazeValidator mv = new MazeValidator(maze, explorer, path);
+        explorer.attach(mv);
+        mv.validateEastMazeWithPath();
         assertTrue(mv.getIsValidEast(), "Maze is valid from east path");
     }
 

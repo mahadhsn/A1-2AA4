@@ -19,6 +19,8 @@ class DirectMazeTest {
         String westPath = "F R 2F L 3F R F L F R F L 2F";
         Path path = new Path(westPath);
         MazeValidator mv = new MazeValidator(maze, explorer, path);
+        explorer.attach(mv);
+        mv.validateWestMazeWithPath();
         assertTrue(mv.getIsValidWest(), "Maze is valid from west path");
     }
 
@@ -27,6 +29,8 @@ class DirectMazeTest {
         String eastPath = "2F R 2F L 4F R 2F L F";
         Path path = new Path(eastPath);
         MazeValidator mv = new MazeValidator(maze, explorer, path);
+        explorer.attach(mv);
+        mv.validateEastMazeWithPath();
         assertTrue(mv.getIsValidEast(), "Maze is valid from east path");
     }
 }

@@ -19,6 +19,8 @@ class StraightMazeTest {
         String westPath = "4F";
         Path path = new Path(westPath);
         MazeValidator mv = new MazeValidator(maze, explorer, path);
+        explorer.attach(mv);
+        mv.validateWestMazeWithPath();
         assertTrue(mv.getIsValidWest(), "Maze is valid from west path");
     }
 
@@ -27,6 +29,8 @@ class StraightMazeTest {
         String eastPath = "4F";
         Path path = new Path(eastPath);
         MazeValidator mv = new MazeValidator(maze, explorer, path);
+        explorer.attach(mv);
+        mv.validateEastMazeWithPath();
         assertTrue(mv.getIsValidEast(), "Maze is valid from east path");
     }
 }

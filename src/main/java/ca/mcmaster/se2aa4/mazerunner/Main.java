@@ -65,6 +65,8 @@ public class Main {
             System.out.println("Starting maze at: " + Arrays.toString(explorer.getStart())); // print starting position
 
             MazeValidator mazeValidator = new MazeValidator(maze, explorer, path); // initiate mazeValidator
+            explorer.attach(mazeValidator);
+            mazeValidator.validateWestMazeWithPath();
             
             if (!mazeValidator.getIsValidWest()) {
                 logger.error("Maze could not be solved from west side with the provided path.");
@@ -75,6 +77,8 @@ public class Main {
             }
 
             System.out.println();
+
+            mazeValidator.validateEastMazeWithPath();
 
             System.out.println("Solving maze with path from east"); 
             System.out.println("Starting maze at: " + Arrays.toString(explorer.getStart())); // print starting position
