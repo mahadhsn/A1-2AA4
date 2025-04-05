@@ -321,6 +321,15 @@ public class Explorer extends Subject { // Explorer class to explore the maze
         resetStates();
     }
 
+    private void resetStates() {
+        solvedEast = false;
+        solvedWest = false;
+        isValidEast = false;
+        isValidWest = false;
+        solvingFromEast = false;
+        solvingFromWest = false;
+    }
+
     // getters
     public int[] getCurrentPosition() {
         return currentPos;
@@ -332,15 +341,6 @@ public class Explorer extends Subject { // Explorer class to explore the maze
     
     public int[] getStart() {
         return start;
-    }
-
-    private void resetStates() {
-        solvedEast = false;
-        solvedWest = false;
-        isValidEast = false;
-        isValidWest = false;
-        solvingFromEast = false;
-        solvingFromWest = false;
     }
 
     public boolean isValidEast() {
